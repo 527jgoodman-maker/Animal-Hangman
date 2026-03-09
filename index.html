@@ -24,7 +24,16 @@
         <header>
             <!-- place navbar here -->
         </header>
+        <div class="popup">
+                <div class="popup-content">
+                    <h2>chose difficulty</h2>
+                    <p>Select the difficulty level for your Hangman game.</p>
+                    <button onclick="startGame('easy'); document.querySelector('.popup').style.display='none';" class="btn btn-success">Easy</button>
+                    <button onclick="startGame('medium'); document.querySelector('.popup').style.display='none';" class="btn btn-warning">Medium</button>
+                    <button onclick="startGame('hard'); document.querySelector('.popup').style.display='none';" class="btn btn-danger">Hard</button>
+                </div>
         <main>
+            
             <div class="container mt-5">
                 <h1 class="text-center mb-4">Animal Hangman </h1>
                 <div class="row justify-content-center">
