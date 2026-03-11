@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function startGame(difficulty) {
+
+
     if (difficulty === 'easy') {
       let randomWord = secretEasyWord[Math.floor(Math.random() * secretEasyWord.length)];
     } else if (difficulty === 'medium') {
