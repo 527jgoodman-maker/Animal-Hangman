@@ -22,6 +22,23 @@ function startGame(difficulty) {
     } else if (difficulty === 'hard') {
       let randomWord = secretHardWord[Math.floor(Math.random() * secretHardWord.length)];
     }
-  console.log(randomWord);
-}
 
+}
+// Got this from jake
+//let healthPercent = (guessesLeft / maxWrong) * 100;
+  //document.getElementById("healthBar").style.width = healthPercent + "%";
+
+function updateWordDisplay() {
+  let display = "";
+  for (let i = 0; i < secretWord.length; i++) {
+    let letter = secretWord.charAt(i);
+    if (guessedLetters.includes(letter)) {
+      display += letter + " ";
+    } else {
+      display += "_ ";
+    }
+  }
+  document.getElementById("wordDisplay").textContent = display;
+  document.getElementById("guessedLetters").textContent = guessedLetters.join(" ");
+  
+}  
