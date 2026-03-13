@@ -1,8 +1,11 @@
 const secretEasyWord = ['Lion', 'Tiger', 'Bear', 'Zebra', 'Panda'];
-const secretMediumWord = ['Penguin', 'Elephant', 'Giraffe', 'Zebra', 'Gorilla'];
-const secretHardWord = ['Polar Bear', 'Tiger', 'Bear', 'Zebra', 'Panda'];
+const secretMediumWord = ['Penguin', 'Whale', 'Shark', 'Dolphin', 'Kangaroo'];
+const secretHardWord = ['PolarBear', 'Elephant', 'Giraffe', 'Gorilla', 'Rhinoceros'];
 
-
+let secretWord = "";
+let guessedLetters = [];
+let maxWrong = 6;
+let guessesLeft = 6;
 
 // Listen for the event that fires when the HTML page finishes loading
 document.addEventListener("DOMContentLoaded", function () {
@@ -16,17 +19,20 @@ function startGame(difficulty) {
 
 
     if (difficulty === 'easy') {
-      let randomWord = secretEasyWord[Math.floor(Math.random() * secretEasyWord.length)];
+     secretWord = secretEasyWord[Math.floor(Math.random() * secretEasyWord.length)];
     } else if (difficulty === 'medium') {
-      let randomWord = secretMediumWord[Math.floor(Math.random() * secretMediumWord.length)];
+     secretWord = secretMediumWord[Math.floor(Math.random() * secretMediumWord.length)];
     } else if (difficulty === 'hard') {
-      let randomWord = secretHardWord[Math.floor(Math.random() * secretHardWord.length)];
+     secretWord = secretHardWord[Math.floor(Math.random() * secretHardWord.length)];
     }
 
+    guessedLetters = [];
+    updateWordDisplay();
 }
+
 // Got this from jake
-//let healthPercent = (guessesLeft / maxWrong) * 100;
-  //document.getElementById("healthBar").style.width = healthPercent + "%";
+let healthPercent = (guessesLeft / maxWrong) * 100;
+  document.getElementById("healthBar").style.width = healthPercent + "%";
 
 function updateWordDisplay() {
   let display = "";
@@ -39,6 +45,7 @@ function updateWordDisplay() {
     }
   }
   document.getElementById("wordDisplay").textContent = display;
-  document.getElementById("guessedLetters").textContent = guessedLetters.join(" ");
-  
+  document.getElementById("guessedLetters").textContent = guessedLetters.join(" ")
+console.log(secretWord);
 }  
+
