@@ -30,6 +30,18 @@ function startGame(difficulty) {
     updateWordDisplay();
 }
 
+// Restart game (no page reload)
+function restartGame() {
+  if (!currentDifficulty) return; // no difficulty selected yet
+
+  // Reset variables
+  guessedLetters = [];
+  guessesLeft = maxWrong;
+
+  // Re-run the same difficulty
+  startGame(currentDifficulty);
+}
+
 // Got this from jake
 let healthPercent = (guessesLeft / maxWrong) * 100;
   document.getElementById("healthBar").style.width = healthPercent + "%";
@@ -49,3 +61,6 @@ function updateWordDisplay() {
 console.log(secretWord);
 }  
 
+document.getElementById("restart-button").addEventListener("click", function () {
+  restartGame();
+});
