@@ -1,6 +1,6 @@
-const secretEasyWord = ['Lion', 'Tiger', 'Bear', 'Zebra', 'Panda'];
-const secretMediumWord = ['Penguin', 'Whale', 'Shark', 'Dolphin', 'Kangaroo'];
-const secretHardWord = ['PolarBear', 'Elephant', 'Giraffe', 'Gorilla', 'Rhinoceros'];
+const secretEasyWord = ['lion', 'tiger', 'bear', 'zebra', 'panda', 'giraffe', 'monkey', 'elephant', 'rabbit', 'fox'];
+const secretMediumWord = ['kangaroo', 'alligator', 'chimpanzee', 'hippopotamus', 'crocodile', 'flamingo', 'gorilla', 'penguin', 'raccoon'];
+const secretHardWord = ['saltwatercrocodile', 'snowleopard', 'greatwhiteshark', 'humpbackwhale', 'siberiantiger',];
 
 let secretWord = "";
 let guessedLetters = [];
@@ -64,3 +64,42 @@ console.log(secretWord);
 document.getElementById("restart-button").addEventListener("click", function () {
   restartGame();
 });
+
+
+function restartGame() {
+  // Reset game variables
+  guessedLetters = [];
+  guessesLeft = maxWrong;
+  secretWord = "";
+
+  // Show the popup again
+  document.getElementById("popup").style.display = "flex";
+
+  // Clear the UI
+  document.getElementById("wordDisplay").textContent = "_ _ _ _ _ _ _ _";
+  document.getElementById("guessedLetters").textContent = "";
+  document.getElementById("healthBar").style.width = "100%";
+  
+}
+
+document.getElementById("guess-button").addEventListener("click", function () {
+  let input = document.getElementById("guess-input");
+  let guess = input.value.toLowerCase();
+
+  input.value = "";
+
+  // ignore empty or repeated guesses
+  if (!guess || guessedLetters.includes(guess)) return;
+
+  // add guess
+  guessedLetters.push(guess);
+
+  // check if wrong
+  if (!secretWord.toLowerCase().includes(guess)) {
+    guessesLeft--;
+  }
+
+  // update display
+  updateWordDisplay();
+});
+
