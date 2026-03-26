@@ -48,6 +48,7 @@ let healthPercent = (guessesLeft / maxWrong) * 100;
 
 function updateWordDisplay() {
   let display = "";
+
   for (let i = 0; i < secretWord.length; i++) {
     let letter = secretWord.charAt(i);
     if (guessedLetters.includes(letter)) {
@@ -57,7 +58,8 @@ function updateWordDisplay() {
     }
   }
   document.getElementById("wordDisplay").textContent = display;
-  document.getElementById("guessedLetters").textContent = guessedLetters.join(" ")
+ document.getElementById("guessesLeft").textContent = wrongLetters.join(", ") + " Guesses Left: " + guessesLeft;
+
 console.log(secretWord);
 }  
 
@@ -89,7 +91,7 @@ document.getElementById("guess-button").addEventListener("click", function () {
   input.value = "";
 
   // ignore empty or repeated guesses
-  if (!guess || guessedLetters.includes(guess)) return;
+  if (!guess || guess.length !== 1 || guessedLetters.includes(guess)) return;
 
   // add guess
   guessedLetters.push(guess);
@@ -103,3 +105,29 @@ document.getElementById("guess-button").addEventListener("click", function () {
   updateWordDisplay();
 });
 
+let wrongLetters = guessedLetters.filter (letter => !secretWord.includes(letter));
+
+document.getElementById("guessesLeft").textContent = wrongLetters.join(", ") + " Guesses Left: " + guessesLeft;
+
+function endGame(won) {
+  let message = document.getElementById("message");
+
+  if (won) {
+    message.textContent = "you lost! the word was: " + secretWord;
+    message.style.color = "red";
+  } else {
+    message.textContent = "you won! the word was: " + secretWord;
+    message.style.color = "green";
+  }
+
+  document.getElementById("guess-Input").disabled = true;
+  document.getElementById("guess-button").disabled = true;
+  document.getElementById("message").textContent = '';
+
+  if (!secretWord.toLowerCase().includes(guess)) {
+    guessesLeft--;
+  }
+}
+if (guessesLeft <= 0) {
+  endGame(false); // player loses
+}

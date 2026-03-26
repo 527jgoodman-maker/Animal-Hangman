@@ -181,3 +181,7 @@ button:disabled {
     letter-spacing:2px;
 }
 
+#wrongLetters {
+  color: red;
+  font-weight: bold;
+}
