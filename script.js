@@ -1,133 +1,204 @@
-const secretEasyWord = ['lion', 'tiger', 'bear', 'zebra', 'panda', 'giraffe', 'monkey', 'elephant', 'rabbit', 'fox'];
-const secretMediumWord = ['kangaroo', 'alligator', 'chimpanzee', 'hippopotamus', 'crocodile', 'flamingo', 'gorilla', 'penguin', 'raccoon'];
-const secretHardWord = ['saltwatercrocodile', 'snowleopard', 'greatwhiteshark', 'humpbackwhale', 'siberiantiger',];
+// ── Word banks ─────────────────────────────────────────────────
+// Three lists of animals, one per difficulty level
+const wordBanks = {
+  easy:   ['lion', 'tiger', 'bear', 'zebra', 'panda', 'giraffe', 'monkey', 'elephant', 'rabbit', 'fox'],
+  medium: ['kangaroo', 'alligator', 'chimpanzee', 'hippopotamus', 'crocodile', 'flamingo', 'gorilla', 'penguin', 'raccoon', 'platypus'],
+  hard:   ['saltwatercrocodile', 'snowleopard', 'greatwhiteshark', 'humpbackwhale', 'siberiantiger', 'komododragon', 'arcticfox', 'blueringedoctopus', 'mantisshrimp', 'axolotl']
+};
 
-let secretWord = "";
-let guessedLetters = [];
-let maxWrong = 6;
-let guessesLeft = 6;
-
-// Listen for the event that fires when the HTML page finishes loading
-document.addEventListener("DOMContentLoaded", function () {
- // Any code inside this function will run
- // as soon as the page is fully loaded
- startGame();
-});
-
-
-function startGame(difficulty) {
+// ── Game state ─────────────────────────────────────────────────
+let secretWord      = "";   // the word the player is trying to guess
+let guessedLetters  = [];   // all letters the player has tried
+let guessesLeft     = 6;    // how many wrong guesses remain
+let maxWrong        = 6;    // max wrong guesses for the chosen difficulty
+let currentDifficulty = ""; // "easy", "medium", or "hard"
+let gameOver        = false; // true once the player wins or loses
 
 
-    if (difficulty === 'easy') {
-     secretWord = secretEasyWord[Math.floor(Math.random() * secretEasyWord.length)];
-    } else if (difficulty === 'medium') {
-     secretWord = secretMediumWord[Math.floor(Math.random() * secretMediumWord.length)];
-    } else if (difficulty === 'hard') {
-     secretWord = secretHardWord[Math.floor(Math.random() * secretHardWord.length)];
-    }
-
-    guessedLetters = [];
-    updateWordDisplay();
+// ── selectDifficulty ───────────────────────────────────────────
+// Runs when the player clicks a difficulty button in the popup.
+// Saves the difficulty, hides the popup, then starts the game.
+function selectDifficulty(difficulty) {
+  currentDifficulty = difficulty;
+  document.getElementById('popup').style.display = 'none';
+  startGame(difficulty);
 }
 
-// Restart game (no page reload)
-function restartGame() {
-  if (!currentDifficulty) return; // no difficulty selected yet
 
-  // Reset variables
+// ── startGame ──────────────────────────────────────────────────
+// Picks a random word, resets all variables, and refreshes the screen.
+function startGame(difficulty) {
+  // Pick a random word from the right list
+  let bank = wordBanks[difficulty];
+  secretWord = bank[Math.floor(Math.random() * bank.length)];
+
+  // Reset game state
   guessedLetters = [];
+  gameOver = false;
+
+  // Set how many wrong guesses are allowed per difficulty
+  if (difficulty === 'easy')        maxWrong = 6;
+  else if (difficulty === 'medium') maxWrong = 6;
+  else if (difficulty === 'hard')   maxWrong = 6;
+
   guessesLeft = maxWrong;
 
-  // Re-run the same difficulty
-  startGame(currentDifficulty);
+  // Re-enable input and guess button (in case they were disabled)
+  document.getElementById('guess-input').disabled  = false;
+  document.getElementById('guess-button').disabled = false;
+
+  // Clear any leftover win/lose message
+  document.getElementById('message').textContent = '';
+
+  updateDisplay();
+
+  console.log(secretWord); // shows the answer in the console for testing
 }
 
-// Got this from jake
-let healthPercent = (guessesLeft / maxWrong) * 100;
-  document.getElementById("healthBar").style.width = healthPercent + "%";
 
-function updateWordDisplay() {
-  let display = "";
+// ── updateDisplay ──────────────────────────────────────────────
+// Refreshes the word, guessed letters, guesses left, and health bar.
+// Called after every guess and at the start of each game.
+function updateDisplay() {
 
+  // from the javascript refrence
+  let wordDisplay = "";
   for (let i = 0; i < secretWord.length; i++) {
     let letter = secretWord.charAt(i);
     if (guessedLetters.includes(letter)) {
-      display += letter + " ";
+      wordDisplay += letter + " ";
     } else {
-      display += "_ ";
+      wordDisplay += "_ ";
     }
   }
-  document.getElementById("wordDisplay").textContent = display;
- document.getElementById("guessesLeft").textContent = wrongLetters.join(", ") + " Guesses Left: " + guessesLeft;
+  document.getElementById('wordDisplay').textContent = wordDisplay;
 
-console.log(secretWord);
-}  
+  // Show all guessed letters on screen
+  document.getElementById('guessedLetters').textContent =
+    guessedLetters.length > 0 ? "Guessed: " + guessedLetters.join(", ") : "";
 
-document.getElementById("restart-button").addEventListener("click", function () {
-  restartGame();
-});
+  // Show guesses remaining
+  document.getElementById('guessesLeft').textContent = "Guesses Left: " + guessesLeft;
 
-
-function restartGame() {
-  // Reset game variables
-  guessedLetters = [];
-  guessesLeft = maxWrong;
-  secretWord = "";
-
-  // Show the popup again
-  document.getElementById("popup").style.display = "flex";
-
-  // Clear the UI
-  document.getElementById("wordDisplay").textContent = "_ _ _ _ _ _ _ _";
-  document.getElementById("guessedLetters").textContent = "";
-  document.getElementById("healthBar").style.width = "100%";
-  
+  // got this healthb bar idea from jake
+  let healthPercent = (guessesLeft / maxWrong) * 100;
+  document.getElementById('healthBar').style.width = healthPercent + "%";
 }
 
-document.getElementById("guess-button").addEventListener("click", function () {
-  let input = document.getElementById("guess-input");
+
+// ── handleGuess ────────────────────────────────────────────────
+// Runs whenever the player submits a guess (button click or Enter).
+function handleGuess() {
+  if (gameOver) return; // ignore guesses after the game ends
+
+  let input = document.getElementById('guess-input');
   let guess = input.value.toLowerCase();
+  input.value = ""; // clear the input box
 
-  input.value = "";
+  // Must be exactly one letter A–Z 
+  // the .test is how it checks if the guessed letter is a single letter from a to z, the ^ means start of string, $ means end of string, and [a-z] means any lowercase letter
+  if (guess.length !== 1 || guess < 'a' || guess > 'z') {
+    document.getElementById('message').textContent = "Please enter a single letter (A–Z).";
+    return;
+  }
 
-  // ignore empty or repeated guesses
-  if (!guess || guess.length !== 1 || guessedLetters.includes(guess)) return;
+  // Already guessed this letter — don't count it as a wrong guess
+  if (guessedLetters.includes(guess)) {
+    document.getElementById('message').textContent = "You already guessed that letter.";
+    return;
+  }
 
-  // add guess
+  // Valid new guess — clear any old message and save the letter
+  document.getElementById('message').textContent = '';
   guessedLetters.push(guess);
 
-  // check if wrong
-  if (!secretWord.toLowerCase().includes(guess)) {
+  // If the letter is NOT in the word, subtract one guess
+  if (!secretWord.includes(guess)) {
     guessesLeft--;
   }
 
-  // update display
-  updateWordDisplay();
+  updateDisplay();
+
+  // Check win: every letter in the word has been guessed
+  if (checkWin()) {
+    endGame(true);
+    return;
+  }
+
+  // Check lose: no guesses left
+  if (guessesLeft <= 0) {
+    endGame(false);
+  }
+}
+
+
+// ── checkWin ───────────────────────────────────────────────────
+// Returns true if every letter in the secret word has been guessed.
+function checkWin() {
+  for (let i = 0; i < secretWord.length; i++) {
+    if (!guessedLetters.includes(secretWord.charAt(i))) {
+      return false; // found an un-guessed letter, not a win yet
+    }
+  }
+  return true;
+}
+
+
+// ── endGame ────────────────────────────────────────────────────
+// Shows a win or lose message and disables guessing.
+function endGame(won) {
+  gameOver = true;
+
+  let message = document.getElementById('message');
+  if (won) {
+    message.textContent = "You won! The word was: " + secretWord;
+    message.style.color = "green";
+  } else {
+    message.textContent = "You lost! The word was: " + secretWord;
+    message.style.color = "red";
+  }
+
+  // .disabled makes the input box useless so the player cant keep guessing after the game ends but only when true
+  document.getElementById('guess-input').disabled  = true;
+  document.getElementById('guess-button').disabled = true;
+}
+
+
+// ── restartGame ────────────────────────────────────────────────
+// Resets everything and shows the difficulty popup again.
+function restartGame() {
+  // Clear all game state
+  secretWord        = "";
+  guessedLetters    = [];
+  guessesLeft       = 6;
+  maxWrong          = 6;
+  currentDifficulty = "";
+  gameOver          = false;
+
+  // Reset the screen
+  document.getElementById('wordDisplay').textContent    = "_ _ _ _ _ _ _ _";
+  document.getElementById('guessedLetters').textContent = "";
+  document.getElementById('guessesLeft').textContent    = "Guesses Left: 6";
+  document.getElementById('message').textContent        = "";
+  document.getElementById('healthBar').style.width      = "100%";
+
+  // Re-enable input
+  document.getElementById('guess-input').disabled  = false;
+  document.getElementById('guess-button').disabled = false;
+
+  // Show the difficulty popup again
+  document.getElementById('popup').style.display = 'flex';
+}
+
+
+// ── Event listeners ────────────────────────────────────────────
+// Guess button click
+document.getElementById('guess-button').addEventListener('click', handleGuess);
+
+// Enter key inside the input box
+document.getElementById('guess-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') handleGuess();
 });
 
-let wrongLetters = guessedLetters.filter (letter => !secretWord.includes(letter));
-
-document.getElementById("guessesLeft").textContent = wrongLetters.join(", ") + " Guesses Left: " + guessesLeft;
-
-function endGame(won) {
-  let message = document.getElementById("message");
-
-  if (won) {
-    message.textContent = "you lost! the word was: " + secretWord;
-    message.style.color = "red";
-  } else {
-    message.textContent = "you won! the word was: " + secretWord;
-    message.style.color = "green";
-  }
-
-  document.getElementById("guess-Input").disabled = true;
-  document.getElementById("guess-button").disabled = true;
-  document.getElementById("message").textContent = '';
-
-  if (!secretWord.toLowerCase().includes(guess)) {
-    guessesLeft--;
-  }
-}
-if (guessesLeft <= 0) {
-  endGame(false); // player loses
-}
+// Restart button click
+document.getElementById('restart-button').addEventListener('click', restartGame);

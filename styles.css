@@ -1,187 +1,252 @@
 /* i used ai for this part of the project */
-/* Reset */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@700;800&display=swap');
+
+/* ── Base reset ───────────────────────────────────────── */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", "Segoe UI", sans-serif;
+  font-family: "Fredoka", "Segoe UI", sans-serif;
 }
 
-/* Sunset sky background */
+/* ── Background ───────────────────────────────────────── */
+/*
+  A vibrant animal-themed background with:
+  1. Warm safari-inspired gradient
+  2. Animated subtle texture layers for organic feel
+  3. Paw print accent overlay for theme
+*/
 body {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-    180deg,
-    #7ec8ff 0%,   /* sky blue */
-    #a6d8ff 30%,  /* lighter sky */
-    #ffd6a5 65%,  /* soft sunset orange */
-    #ffb4a2 100%  /* sunset pink */
-  );
+
+  background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 50%, #ffdbad 100%);
+  
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 70% 60% at 75% 15%, rgba(255, 200, 100, 0.4) 0%, transparent 75%),
+    radial-gradient(ellipse 60% 50% at 25% 85%, rgba(200, 140, 80, 0.25) 0%, transparent 70%);
 }
 
-/* Game container */
+/* ── Game container ───────────────────────────────────── */
 .container {
   width: 720px;
   padding: 50px;
-  background: rgba(255,255,255,0.95);
-  border-radius: 22px;
+  background: rgba(255, 252, 245, 0.97);
+  border-radius: 28px;
   text-align: center;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.15);
-  backdrop-filter: blur(6px);
+  border: 3px solid #d4a574;
+  box-shadow:
+    0 3px 0 #b89a6a,
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 25px 50px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 }
 
-/* Title */
+/* ── Title ────────────────────────────────────────────── */
 h1 {
-  font-size: 46px;
-  color: #2f5233;
-  margin-bottom: 20px;
+  font-size: 52px;
+  color: #2d1f0f;
+  margin-bottom: 25px;
+  letter-spacing: -0.5px;
+  font-family: "Nunito", "Fredoka", sans-serif;
+  font-weight: 800;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.08);
 }
 
-/* Category text */
-.category {
-  font-size: 18px;
-  color: #6b7280;
-}
-
-/* Word display */
-.word {
-  font-size: 44px;
-  letter-spacing: 16px;
-  font-weight: 600;
-  color: #1f2937;
+/* ── Word display ─────────────────────────────────────── */
+.wordDisplay {
+  font-size: 40px;
+  letter-spacing: 12px;
+  font-weight: 700;
+  color: #1a1410;
   margin: 30px 0;
-}
-
-/* Letters keyboard */
-.letters {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 12px;
-  margin-top: 25px;
-}
-
-/* Letter buttons */
-button {
+  min-height: 55px;
+  font-family: "Nunito", "Fredoka", sans-serif;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
   padding: 15px;
-  font-size: 18px;
-  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 227, 186, 0.5), rgba(255, 240, 210, 0.5));
+  border-radius: 16px;
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+button {
+  padding: 12px 22px;
+  font-size: 16px;
+  border-radius: 14px;
   border: none;
-  background: #4caf50;
+  background: linear-gradient(135deg, #5ec96f 0%, #4caf50 100%);
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  font-family: "Fredoka", sans-serif;
 }
 
-/* Hover animation */
 button:hover {
-  background: #3f9142;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, #66d47a 0%, #5eb960 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
 }
 
-/* Disabled buttons */
+button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+}
+
 button:disabled {
-  background: #c8e6c9;
-  color: #5f6b5f;
+  background: #d9eddb;
+  color: #6b8b6f;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Status text */
-.status {
-  font-size: 22px;
-  margin-top: 30px;
-  color: #374151;
+/* ── Difficulty buttons (popup) ───────────────────────── */
+.popup-content .btn {
+  border: 3px solid rgba(0, 0, 0, 0.25);
+  margin: 0 12px !important;
 }
 
-/* Popup modal */
+.popup-content .btn-success {
+  border-color: #2d5a2d;
+}
+
+.popup-content .btn-warning {
+  border-color: #8b6914;
+}
+
+.popup-content .btn-danger {
+  border-color: #8b3a3a;
+}
+
+/* ── Popup modal ──────────────────────────────────────── */
 .popup {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .popup-content {
-  background: white;
-  padding: 40px 50px;
-  border-radius: 22px;
+  background: linear-gradient(135deg, #fffcf4 0%, #fff9f0 100%);
+  padding: 45px 55px;
+  border-radius: 28px;
   text-align: center;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+  border: 3px solid #d4a574;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .popup-content h2 {
-  font-size: 28px;
-  color: #2f5233;
-  margin-bottom: 10px;
+  font-size: 32px;
+  color: #2d1f0f;
+  margin-bottom: 12px;
+  font-family: "Nunito", "Fredoka", sans-serif;
+  font-weight: 800;
 }
 
 .popup-content p {
   color: #6b7280;
-  margin-bottom: 25px;
-}
-
-.popup-content .btn {
-  margin: 0 8px;
-  padding: 10px 24px;
+  margin-bottom: 30px;
   font-size: 16px;
 }
 
-/* Restart button */
-.reset {
-  margin-top: 30px;
-  padding: 14px 32px;
-  font-size: 18px;
-  background: #8b5e3c;
-  border-radius: 14px;
+/* ── Health bar ───────────────────────────────────────── */
+/*
+  An organic, playful health bar styled for the animal theme:
+  - Rounded corners for friendliness
+  - Vibrant gradient fill (red → orange → green)
+  - Smooth animations and shadow effects
+*/
+#healthContainer {
+  width: 100%;
+  height: 32px;
+  background: linear-gradient(135deg, #e6d4c1 0%, #dcc5b0 100%);
+  border: 2.5px solid #a67c52;
+  border-radius: 10px;
+  margin: 25px 0 15px;
+  overflow: hidden;
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15);
 }
 
-.reset:hover {
-  background: #6d472c;
-}
-#healthContainer{
-    width:100%;
-    height:30px;
-    background:#1b1b1b;
-    border:3px solid white;
-    border-radius:12px;
-    margin-top:20px;
-    overflow:hidden;
-    box-shadow:0px 0px 10px black inset;
+#healthBar {
+  height: 100%;
+  width: 100%;
+  /* gradient is wider than the bar so color shifts as width shrinks */
+  background: linear-gradient(90deg, #c97d62 0%, #e8a020 50%, #a39d5d 100%);
+  background-size: 300% 100%;
+  background-position: right center;
+  border-radius: 8px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#healthBar{
-    height:100%;
-    width:100%;
-    background:linear-gradient(90deg,#ffb4a2,#ffb4a2);
-    border-radius:8px;
-    transition:width 0.4s ease;
+/* ── Guessed letters ──────────────────────────────────── */
+#guessedLetters {
+  color: #2d1f0f;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  padding: 15px;
+  background: rgba(255, 241, 218, 0.7);
+  border-radius: 12px;
+  margin: 15px 0;
 }
 
-
-/* OPTIONAL LABEL */
-
-#healthContainer::before{
-    position:absolute;
-    margin-top:-25px;
-    font-size:14px;
-    color:white;
-    letter-spacing:2px;
+/* ── Message area (win / lose / duplicate notice) ────── */
+#message {
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 15px;
+  min-height: 35px;
+  font-family: "Nunito", "Fredoka", sans-serif;
 }
 
-#wrongLetters {
-  color: red;
-  font-weight: bold;
+/* ── Guesses left counter ─────────────────────────────── */
+#guessesLeft {
+  font-size: 22px;
+  color: #2d1f0f;
+  font-weight: 600;
+  margin: 20px 0;
+}
+
+/* ── Restart button ───────────────────────────────────── */
+#restart-button {
+  background: linear-gradient(135deg, #a67c52 0%, #8b6a47 100%);
+  box-shadow: 0 4px 12px rgba(139, 94, 60, 0.3);
+}
+
+#restart-button:hover {
+  background: linear-gradient(135deg, #b88a5d 0%, #996744 100%);
+  box-shadow: 0 8px 20px rgba(139, 94, 60, 0.4);
 }
