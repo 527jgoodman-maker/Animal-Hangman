@@ -1,5 +1,5 @@
 // ── Word banks ─────────────────────────────────────────────────
-// Three lists of animals, one per difficulty level
+
 const wordBanks = {
   easy:   ['lion', 'tiger', 'bear', 'zebra', 'panda', 'giraffe', 'monkey', 'elephant', 'rabbit', 'fox'],
   medium: ['kangaroo', 'alligator', 'chimpanzee', 'hippopotamus', 'crocodile', 'flamingo', 'gorilla', 'penguin', 'raccoon', 'platypus'],
@@ -7,12 +7,12 @@ const wordBanks = {
 };
 
 // ── Game state ─────────────────────────────────────────────────
-let secretWord      = "";   // the word the player is trying to guess
-let guessedLetters  = [];   // all letters the player has tried
-let guessesLeft     = 6;    // how many wrong guesses remain
-let maxWrong        = 6;    // max wrong guesses for the chosen difficulty
-let currentDifficulty = ""; // "easy", "medium", or "hard"
-let gameOver        = false; // true once the player wins or loses
+let secretWord = "";   
+let guessedLetters = [];   
+let guessesLeft = 6;    
+let maxWrong = 6;    
+let currentDifficulty = ""; 
+let gameOver = false; 
 
 
 // ── selectDifficulty ───────────────────────────────────────────
@@ -28,7 +28,7 @@ function selectDifficulty(difficulty) {
 // ── startGame ──────────────────────────────────────────────────
 // Picks a random word, resets all variables, and refreshes the screen.
 function startGame(difficulty) {
-  // Pick a random word from the right list
+  
   let bank = wordBanks[difficulty];
   secretWord = bank[Math.floor(Math.random() * bank.length)];
 
@@ -37,14 +37,14 @@ function startGame(difficulty) {
   gameOver = false;
 
   // Set how many wrong guesses are allowed per difficulty
-  if (difficulty === 'easy')        maxWrong = 6;
+  if (difficulty === 'easy') maxWrong = 6;
   else if (difficulty === 'medium') maxWrong = 6;
-  else if (difficulty === 'hard')   maxWrong = 6;
+  else if (difficulty === 'hard') maxWrong = 6;
 
   guessesLeft = maxWrong;
 
   // Re-enable input and guess button (in case they were disabled)
-  document.getElementById('guess-input').disabled  = false;
+  document.getElementById('guess-input').disabled = false;
   document.getElementById('guess-button').disabled = false;
 
   // Clear any leftover win/lose message
@@ -73,14 +73,14 @@ function updateDisplay() {
   }
   document.getElementById('wordDisplay').textContent = wordDisplay;
 
-  // Show all guessed letters on screen
+  // Show all guessed letters on screen (question mark indicates a shorter version of a if/else statement )
   document.getElementById('guessedLetters').textContent =
     guessedLetters.length > 0 ? "Guessed: " + guessedLetters.join(", ") : "";
 
   // Show guesses remaining
   document.getElementById('guessesLeft').textContent = "Guesses Left: " + guessesLeft;
 
-  // got this healthb bar idea from jake
+  // got this health bar idea from jake (it updates the visual health bar based on how many guesses are left, so it shrinks as you get closer to losing)
   let healthPercent = (guessesLeft / maxWrong) * 100;
   document.getElementById('healthBar').style.width = healthPercent + "%";
 }
@@ -93,16 +93,15 @@ function handleGuess() {
 
   let input = document.getElementById('guess-input');
   let guess = input.value.toLowerCase();
-  input.value = ""; // clear the input box
+  input.value = ""; 
 
   // Must be exactly one letter A–Z 
-  // the .test is how it checks if the guessed letter is a single letter from a to z, the ^ means start of string, $ means end of string, and [a-z] means any lowercase letter
   if (guess.length !== 1 || guess < 'a' || guess > 'z') {
     document.getElementById('message').textContent = "Please enter a single letter (A–Z).";
     return;
   }
 
-  // Already guessed this letter — don't count it as a wrong guess
+  // Already guessed this letter doesnt count it as a wrong guess
   if (guessedLetters.includes(guess)) {
     document.getElementById('message').textContent = "You already guessed that letter.";
     return;
@@ -137,7 +136,7 @@ function handleGuess() {
 function checkWin() {
   for (let i = 0; i < secretWord.length; i++) {
     if (!guessedLetters.includes(secretWord.charAt(i))) {
-      return false; // found an un-guessed letter, not a win yet
+      return false; 
     }
   }
   return true;
@@ -168,19 +167,19 @@ function endGame(won) {
 // Resets everything and shows the difficulty popup again.
 function restartGame() {
   // Clear all game state
-  secretWord        = "";
-  guessedLetters    = [];
-  guessesLeft       = 6;
-  maxWrong          = 6;
+  secretWord = "";
+  guessedLetters = [];
+  guessesLeft = 6;
+  maxWrong = 6;
   currentDifficulty = "";
-  gameOver          = false;
+  gameOver = false;
 
   // Reset the screen
-  document.getElementById('wordDisplay').textContent    = "_ _ _ _ _ _ _ _";
+  document.getElementById('wordDisplay').textContent = "_ _ _ _ _ _ _ _";
   document.getElementById('guessedLetters').textContent = "";
-  document.getElementById('guessesLeft').textContent    = "Guesses Left: 6";
-  document.getElementById('message').textContent        = "";
-  document.getElementById('healthBar').style.width      = "100%";
+  document.getElementById('guessesLeft').textContent = "Guesses Left: 6";
+  document.getElementById('message').textContent = "";
+  document.getElementById('healthBar').style.width = "100%";
 
   // Re-enable input
   document.getElementById('guess-input').disabled  = false;
@@ -195,7 +194,7 @@ function restartGame() {
 // Guess button click
 document.getElementById('guess-button').addEventListener('click', handleGuess);
 
-// Enter key inside the input box
+// this allows the player to press Enter to submit their guess instead of clicking the button
 document.getElementById('guess-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') handleGuess();
 });
